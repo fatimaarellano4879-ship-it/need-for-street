@@ -1,24 +1,30 @@
+
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
-import { bunny } from 'laravel-vite-plugin/fonts';
 import tailwindcss from '@tailwindcss/vite';
+import path from 'node:path';
+
+const root = path.resolve(process.cwd());
 
 export default defineConfig({
     plugins: [
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js'],
-            refresh: true,
-            fonts: [
-                bunny('Instrument Sans', {
-                    weights: [400, 500, 600],
-                }),
+            input: [
+                'resources/css/app.css',
+                'resources/assets/css/demo.css',
+                'resources/js/app.js',
+                'resources/assets/vendor/scss/core.scss',
+                'resources/assets/vendor/fonts/iconify/iconify.css',
+                'resources/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.scss',
             ],
+            refresh: true,
         }),
         tailwindcss(),
     ],
-    server: {
-        watch: {
-            ignored: ['**/storage/framework/views/**'],
+
+    resolve: {
+        alias: {
+            '@': root + '/resources',
         },
     },
 });

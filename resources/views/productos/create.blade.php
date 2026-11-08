@@ -1,51 +1,71 @@
-<!DOCTYPE html>
-<html>
 
-<head>
-    <title>Registrar producto</title>
-</head>
+@extends('layouts.app')
 
-<body>
+@section('title', 'Registrar producto | NEED FOR STREET')
 
-<h1>Registrar producto</h1>
+@section('content')
+    <div class="mb-4">
+        <h1 class="h3 fw-bold mb-1">Registrar producto</h1>
+        <p class="text-secondary mb-0">
+            Agrega un producto al catálogo de NEED FOR STREET.
+        </p>
+    </div>
 
+    <div class="nfs-card">
+        <form action="{{ route('productos.store') }}" method="POST">
+            @csrf
+                        
+            <div class="mb-3">
+                <label for="nombre" class="form-label">
+                    Nombre del producto
+                </label>
 
-@if(session('success'))
-    <p>
-        {{ session('success') }}
-    </p>
-@endif
+                <input
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    class="form-control @error('nombre') is-invalid @enderror"
+                    value="{{ old('nombre') }}"
+                    maxlength="100"
+                >
 
+                @error('nombre')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
 
-<form method="POST" action="/productos">
+            <div class="mb-4">
+                <label for="precio" class="form-label">Precio</label>
 
-    @csrf
+                <input
+                    type="number"
+                    id="precio"
+                    name="precio"
+                    class="form-control @error('precio') is-invalid @enderror"
+                    value="{{ old('precio') }}"
+                    placeholder="Ej. 500.00"
+                    min="0"
+                    step="0"
+                    required
+                >
 
-    <label>
-        Nombre:
-    </label>
+                @error('precio')
+                    <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
 
-    <input type="text" name="nombre">
+            <div class="d-flex flex-wrap gap-2">
+                <button type="submit" class="btn btn-primary">
+                    Guardar producto
+                </button>
 
-    <br><br>
-
-
-    <label>
-        Precio:
-    </label>
-
-    <input type="number" name="precio">
-
-    <br><br>
-
-
-    <button type="submit">
-        Guardar
-    </button>
-
-</form>
-
-
-</body>
-
-</html>
+                <a href="{{ route('productos.index') }}"
+                   class="btn btn-outline-secondary">
+                    Cancelar
+                </a>
+            </div>
+        </form>
+    </div>
+@endsection

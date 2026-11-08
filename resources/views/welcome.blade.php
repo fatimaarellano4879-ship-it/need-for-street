@@ -1,20 +1,23 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Need For Street</title>
-</head>
 
-<body>
+@extends('layouts.app')
 
-<h1>Need For Street</h1>
+@section('title', 'Inicio | NEED FOR STREET')
 
-<p>
-Sistema de gestión y venta de productos.
-</p>
+@section('content')
+    <div class="nfs-card">
+        <h1 class="display-5 fw-bold">NEED FOR STREET</h1>
 
-<a href="/productos">
-    Ver productos
-</a>
+        <p class="text-secondary">
+            Sistema de gestión y venta de productos.
+        </p>
 
-</body>
-</html>
+        <a href="{{ route('productos.index') }}" class="btn btn-primary">
+            Ver productos
+        </a>
+
+        <a href="{{ route('productos.create') }}"
+           class="btn btn-outline-primary ms-2">
+            Registrar producto
+        </a>
+    </div>
+@endsection
