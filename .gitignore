@@ -27,3 +27,9 @@ Homestead.yaml
 Thumbs.db
 
 /backups/
+
+# Respaldos locales y archivos de trabajo
+/Respaldo viejo/
+*.sqlite
+*.sqlite-*
+*.zip

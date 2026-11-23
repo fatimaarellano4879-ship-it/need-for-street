@@ -1,35 +1,27 @@
 <?php
 
+use App\Http\Controllers\NeedForStreetController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProductoController;
-use App\Http\Middleware\ValidarPrecioProducto;
 
-// Página principal
-Route::view('/', 'welcome')->name('inicio');
+Route::get('/', [NeedForStreetController::class, 'index']);
 
-// Catálogo de productos
-Route::get('/productos', [ProductoController::class, 'index'])
-    ->name('productos.index');
+Route::prefix('nfs')->group(function () {
+    // Endpoints públicos limitados al acceso inicial.
+    Route::get('/login-users', [NeedForStreetController::class, 'loginUsers'])
+        ->middleware('throttle:30,1');
 
-// Formulario de registro
-Route::get('/productos/crear', [ProductoController::class, 'create'])
-    ->name('productos.create');
+    Route::post('/login', [NeedForStreetController::class, 'login'])
+        ->middleware('throttle:5,1');
 
-// Guardar producto: validar el precio antes de llegar al controlador
-Route::post('/productos', [ProductoController::class, 'store'])
-    ->middleware(ValidarPrecioProducto::class)
-    ->name('productos.store');
+    Route::get('/session', [NeedForStreetController::class, 'sessionStatus']);
 
-// Formulario de edición
-Route::get('/productos/{producto}/editar', [ProductoController::class, 'edit'])
-    ->name('productos.edit');
-
-// Actualizar producto: aplicar la misma regla
-Route::put('/productos/{producto}', [ProductoController::class, 'update'])
-    ->middleware(ValidarPrecioProducto::class)
-    ->name('productos.update');
-
-// Eliminar producto
-// Eliminar producto
-Route::delete('/productos/{producto}', [ProductoController::class, 'destroy'])
-    ->name('productos.destroy');
+    // Todas las operaciones de datos requieren una sesión Laravel válida.
+    Route::middleware('auth')->group(function () {
+        Route::post('/logout', [NeedForStreetController::class, 'logout']);
+        Route::get('/bootstrap', [NeedForStreetController::class, 'bootstrap']);
+        Route::post('/sync', [NeedForStreetController::class, 'sync']);
+        Route::get('/qr/{code}', [NeedForStreetController::class, 'qr'])
+            ->where('code', '[A-Za-z0-9_-]{3,40}')
+            ->middleware('throttle:120,1');
+    });
+});
