@@ -13,4 +13,11 @@ config = laravel_config(
 
 build = laravel_build(config)
 
-laravel_serve(config, build, name = "need-for-street")
+laravel_serve(
+    config,
+    build,
+    name = "need-for-street",
+    extra_commands = {
+        "after_deploy": "php artisan migrate --force",
+    },
+)
